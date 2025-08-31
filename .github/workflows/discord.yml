@@ -1,0 +1,39 @@
+name: Sprite Updates to Discord
+
+# This runs whenever a push changes files in these folders
+on:
+  push:
+    paths:
+      - 'sprites/front/**'
+      - 'sprites/back/**'
+      - 'sprites/other/**'
+      - 'sprites/alt/**'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Collect changed files
+        id: changes
+        run: |
+          echo "CHANGED=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep -E '^(sprites/front|sprites/back|sprites/other|sprites/alt)/' || true)" >> $GITHUB_ENV
+
+      - name: Send update to Discord
+        if: env.CHANGED != ''
+        uses: Ilshidur/action-discord@master
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          args: |
+            📢 **Sprite update detected!**
+            Repo: ${{ github.repository }}
+            Commit: [${{ github.sha }}](${{ github.event.head_commit.url }})
+            Author: ${{ github.actor }}
+            Message: ${{ github.event.head_commit.message }}
+
+            Files changed:
+            ```
+            ${{ env.CHANGED }}
+            ```

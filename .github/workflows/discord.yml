@@ -13,13 +13,10 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
       - name: Collect changed files
         id: changes
         run: |
-          echo "CHANGED=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep -E '^(sprites/front|sprites/back|sprites/other|sprites/alt)/' || true)" >> $GITHUB_ENV
+          echo "CHANGED=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep -E '^(sprites/gen5|sprites/gen5-shiny|sprites/gen5-back|sprites/gen5-back-shiny)/' || true)" >> $GITHUB_ENV
 
       - name: Send update to Discord
         if: env.CHANGED != ''

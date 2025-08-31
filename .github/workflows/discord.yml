@@ -4,10 +4,10 @@ name: Sprite Updates to Discord
 on:
   push:
     paths:
-      - 'sprites/front/**'
-      - 'sprites/back/**'
-      - 'sprites/other/**'
-      - 'sprites/alt/**'
+      - 'sprites/gen5/**'
+      - 'sprites/gen5-shiny/**'
+      - 'sprites/gen5-back/**'
+      - 'sprites/gen5-back-shiny/**'
 
 jobs:
   notify:

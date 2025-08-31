@@ -27,8 +27,9 @@ jobs:
       - name: Send update to Discord
         if: env.CHANGED != ''
         uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
           args: |
             📢 **Gen 5 sprite update detected!**
             Repo: ${{ github.repository }}

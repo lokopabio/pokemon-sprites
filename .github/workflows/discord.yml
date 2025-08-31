@@ -1,6 +1,5 @@
 name: Sprite Updates to Discord
 
-# This runs whenever a push changes files in these folders
 on:
   push:
     paths:
@@ -13,10 +12,17 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2   # important!
+
       - name: Collect changed files
         id: changes
         run: |
-          echo "CHANGED=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep -E '^(sprites/gen5|sprites/gen5-shiny|sprites/gen5-back|sprites/gen5-back-shiny)/' || true)" >> $GITHUB_ENV
+          echo "CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '^(sprites/gen5|sprites/gen5-shiny|sprites/gen5-back|sprites/gen5-back-shiny)/' || true)" >> $GITHUB_ENV
+          echo "Detected changes:"
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }}
 
       - name: Send update to Discord
         if: env.CHANGED != ''
@@ -24,7 +30,7 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           args: |
-            📢 **Sprite update detected!**
+            📢 **Gen 5 sprite update detected!**
             Repo: ${{ github.repository }}
             Commit: [${{ github.sha }}](${{ github.event.head_commit.url }})
             Author: ${{ github.actor }}

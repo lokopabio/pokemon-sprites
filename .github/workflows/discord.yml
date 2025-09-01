@@ -37,7 +37,11 @@ jobs:
             else
               EMOJI="✏️"
             fi
+
+            # Escape backslashes and double quotes in the filename for JSON
+            ESCAPED_FILE=$(echo "$file" | sed 's/\\/\\\\/g; s/"/\\"/g')
+      
             curl -H "Content-Type: application/json" \
-              -d "{\"content\": \"$EMOJI [Sprite updated: $file](${{ github.event.head_commit.url }})\", \"flags\": 64}" \ 
+              -d "{\"content\": \"$EMOJI Sprite updated: $file ${{ github.event.head_commit.url }}\", \"flags\": 64}" \
               $DISCORD_WEBHOOK
           done

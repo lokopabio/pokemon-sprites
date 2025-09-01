@@ -38,6 +38,6 @@ jobs:
               EMOJI="✏️"
             fi
             curl -H "Content-Type: application/json" \
-                 -d "{\"content\": \"$EMOJI [Sprite updated: $file](${{ github.event.head_commit.url }})\"}" \
-                 $DISCORD_WEBHOOK
+              -d "{\"content\": \"$EMOJI [Sprite updated: $file](${{ github.event.head_commit.url }})\", \"flags\": 64}" \ 
+              $DISCORD_WEBHOOK
           done
